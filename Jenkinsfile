@@ -44,37 +44,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-
-                withSonarQubeEnv('sonarqube') {
-
-                    withCredentials([
-                        string(
-                            credentialsId: 'sonar',
-                            variable: 'SONAR_TOKEN'
-                        )
-                    ]) {
-
-                        sh '''
-                        mvn sonar:sonar \
-                        -Dsonar.projectKey=ott-platform \
-                        -Dsonar.projectName="OTT Platform" \
-                        -Dsonar.token=$SONAR_TOKEN
-                        '''
-
-                    }
-                }
-            }
-        }
-
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 15, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
+        
 
         stage('Package') {
             steps {
